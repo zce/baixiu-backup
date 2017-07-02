@@ -12,10 +12,6 @@ return array(
    */
   'BAIXIU_DB_HOST' => '127.0.0.1',
   /**
-   * 数据库名
-   */
-  'BAIXIU_DB_NAME' => 'baixiu',
-  /**
    * 数据库用户名
    */
   'BAIXIU_DB_USER' => 'root',
@@ -23,4 +19,8 @@ return array(
    * 数据库密码
    */
   'BAIXIU_DB_PASSWORD' => 'wanglei',
+  /**
+   * 数据库名
+   */
+  'BAIXIU_DB_NAME' => 'baixiu',
 );
