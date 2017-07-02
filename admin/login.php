@@ -15,13 +15,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST['username'];
   $password = $_POST['password'];
 
-  // 判断用户名密码是否匹配
-  if ($username === 'admin' && $password === 'wanglei') {
-    header('Location: /index.php');
-    exit();
-  } else {
-    $message = '用户名或密码错误！';
+  // 只有数据库才“知道”用户名密码是否正确，所以必须通过查询数据库验证用户名和密码
+
+  // 1. 建立与数据的连接
+  $connection = mysqli_connect(
+    $config['BAIXIU_DB_HOST'],
+    $config['BAIXIU_DB_USER'],
+    $config['BAIXIU_DB_PASSWORD'],
+    $config['BAIXIU_DB_NAME']
+  );
+
+  if (!$connection) {
+    // 链接数据库失败，打印错误信息
+    die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
   }
+
+  // 根据用户名查询用户信息
+  $result = mysqli_query($connection, 'select * from users where email = \'' . $username . '\' limit 1');
+
+  if ($result) {
+    if (mysqli_num_rows($result)) {
+      // 获取结果中的内容
+      $row = mysqli_fetch_assoc($result);
+
+      // 比对密码
+      if ($row['password'] === $password) {
+        // TODO: 登陆成功
+
+        // 跳转到后台首页
+        header('Location: /admin/');
+
+        // 结束执行
+        exit();
+      } else {
+        // 密码错误
+        $message = '用户名或密码错误！';
+      }
+    } else {
+      // 用户名错误
+      $message = '用户名或用户名错误！';
+    }
+
+    // 释放资源
+    mysqli_free_result($result);
+  } else {
+    // 查询失败
+    $message = '出现错误，请稍后再试！';
+  }
+
+  // 2. 关闭与数据库之间的连接
+  mysqli_close($connection);
 }
 ?>
 <!DOCTYPE html>
