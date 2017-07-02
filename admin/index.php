@@ -9,10 +9,12 @@
 // 载入配置文件
 $config = require('../config.php');
 
+// 启用新会话或使用已有会话
+session_start();
+
 // 判断是否登录成功
-// 获取 Cookie 中的内容
-$is_login = $_COOKIE['is_login'];
-if (!isset($is_login) || $is_login !== 'true') {
+$is_login = $_SESSION['is_login'];
+if (!isset($is_login) || $is_login !== true) {
   // 没有设置
   header('Location: /admin/login.php');
   exit();

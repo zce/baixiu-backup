@@ -40,9 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       // 比对密码
       if ($row['password'] === $password) {
-        // 登陆成功，给用户发一个小票（Cookie）
+        // 启用新会话或使用已有会话
+        session_start();
+
         // 记住登录状态
-        setcookie('is_login', 'true');
+        $_SESSION['is_login'] = true;
 
         // 跳转到后台首页
         header('Location: /admin/');
