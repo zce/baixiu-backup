@@ -5,8 +5,15 @@
  * @since   0.1.0 初始化
  * @version 0.1.0 初始化
  */
+
 // 载入头部
 require '../inc/admin-header.php';
+
+// 载入数据操作函数
+require '../inc/db-helper.php';
+
+// 查询全部文章数据
+$posts = query('select * from posts');
 ?>
 <div class="page-title">
   <h1>所有文章</h1>
@@ -55,42 +62,20 @@ require '../inc/admin-header.php';
     </tr>
   </thead>
   <tbody>
+    <?php foreach ($posts as $i => $item) { ?>
     <tr>
       <td class="text-center"><input type="checkbox"></td>
-      <td>随便一个名称</td>
-      <td>小小</td>
-      <td>潮科技</td>
-      <td>2016/10/07</td>
-      <td>已发布</td>
+      <td><?php echo $item['title']; ?></td>
+      <td><?php echo $item['user_id']; ?></td>
+      <td><?php echo $item['category_id']; ?></td>
+      <td><?php echo $item['created'] ?></td>
+      <td><?php echo $item['status']; ?></td>
       <td class="text-center">
         <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
         <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
       </td>
     </tr>
-    <tr>
-      <td class="text-center"><input type="checkbox"></td>
-      <td>随便一个名称</td>
-      <td>小小</td>
-      <td>潮科技</td>
-      <td>2016/10/07</td>
-      <td>已发布</td>
-      <td class="text-center">
-        <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
-        <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-      </td>
-    </tr>
-    <tr>
-      <td class="text-center"><input type="checkbox"></td>
-      <td>随便一个名称</td>
-      <td>小小</td>
-      <td>潮科技</td>
-      <td>2016/10/07</td>
-      <td>已发布</td>
-      <td class="text-center">
-        <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
-        <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-      </td>
-    </tr>
+    <?php } ?>
   </tbody>
 </table>
 <form class="form-inline" action="">
