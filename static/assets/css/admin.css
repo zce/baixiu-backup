@@ -352,9 +352,9 @@ a:focus {
 .login .login-wrap {
   position: relative;
 
-  max-width: 500px;
+  max-width: 380px;
   margin: 180px auto;
-  padding: 100px 50px 40px;
+  padding: 100px 40px 40px;
 
   border-radius: 4px;
   background-color: #fff;
