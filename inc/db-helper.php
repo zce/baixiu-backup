@@ -7,11 +7,10 @@
  */
 
 /**
- * 执行一个查询语句，返回查询到的数据
- * @param  String $sql SQL 语句
- * @return Array       查询到的数据
+ * 建立数据库连接
+ * @return MySQLi 数据库连接对象
  */
-function query ($sql) {
+function connect () {
   // 载入配置文件
   $config = require('../config.php');
 
@@ -27,6 +26,18 @@ function query ($sql) {
   if (!$connection) {
     die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
   }
+
+  return $connection;
+}
+
+/**
+ * 执行一个查询语句，返回查询到的数据
+ * @param  String $sql SQL 语句
+ * @return Array       查询到的数据
+ */
+function query ($sql) {
+  // 获取与数据库之间的连接
+  $connection = connect();
 
   // 执行 SQL 语句，获取一个查询对象
   $result = mysqli_query($connection, $sql);

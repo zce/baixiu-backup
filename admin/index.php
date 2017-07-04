@@ -6,6 +6,9 @@
  * @version 0.1.0 初始化
  */
 
+// 载入配置文件
+$config = require('../config.php');
+
 // 启用新会话或使用已有会话
 session_start();
 
@@ -17,23 +20,47 @@ if (!isset($is_login) || $is_login !== true) {
   exit();
 }
 
-// 载入封装的 query 函数
-require '../inc/db-helper.php';
+// 查询界面上所需的数据
+// 1. 建立与数据的连接
+$connection = mysqli_connect(
+  $config['BAIXIU_DB_HOST'],
+  $config['BAIXIU_DB_USER'],
+  $config['BAIXIU_DB_PASSWORD'],
+  $config['BAIXIU_DB_NAME']
+);
+
+if (!$connection) {
+  // 链接数据库失败，打印错误信息
+  die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+}
 
 // 文章总数
-$post_count = query('select count(1) from posts')[0][0];
+$post_count_result = mysqli_query($connection, 'select count(1) from posts');
+$post_count = mysqli_fetch_row($post_count_result)[0];
+mysqli_free_result($post_count_result);
 
 // 草稿总数
-$draft_count = query('select count(1) from posts where status = \'drafted\'')[0][0];
+$draft_count_result = mysqli_query($connection, 'select count(1) from posts where status = \'drafted\'');
+$draft_count = mysqli_fetch_row($draft_count_result)[0];
+mysqli_free_result($draft_count_result);
 
 // 分类总数
-$category_count = query('select count(1) from categories')[0][0];
+$category_count_result = mysqli_query($connection, 'select count(1) from categories');
+$category_count = mysqli_fetch_row($category_count_result)[0];
+mysqli_free_result($category_count_result);
 
 // 评论总数
-$comment_count = query('select count(1) from comments')[0][0];
+$comment_count_result = mysqli_query($connection, 'select count(1) from comments');
+$comment_count = mysqli_fetch_row($comment_count_result)[0];
+mysqli_free_result($comment_count_result);
 
 // 待审核的评论总数
-$held_count = query('select count(1) from comments where status = \'held\'')[0][0];
+$held_count_result = mysqli_query($connection, 'select count(1) from comments where status = \'held\'');
+$held_count = mysqli_fetch_row($held_count_result)[0];
+mysqli_free_result($held_count_result);
+
+// 2. 关闭与数据库之间的连接
+mysqli_close($connection);
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
