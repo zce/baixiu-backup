@@ -5,7 +5,6 @@
  * @since   0.1.0 初始化
  * @version 0.1.0 初始化
  */
-
 // 载入头部
 require '../inc/admin-header.php';
 ?>
@@ -119,5 +118,6 @@ require '../inc/admin-header.php';
   </ul>
 </form>
 <?php
+$page = 'posts';
 // 载入底部
 require '../inc/admin-footer.php';

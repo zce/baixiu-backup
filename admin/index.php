@@ -40,5 +40,7 @@ $held_count = query('select count(1) from comments where status = \'held\'')[0][
   <p><a class="btn btn-primary btn-lg" href="post-new.html" role="button">写文章</a></p>
 </div>
 <?php
+// 定义页面标识，在 admin-footer 中辨别不同页面
+$page = 'dashboard';
 // 载入底部
 require '../inc/admin-footer.php';
