@@ -14,6 +14,24 @@ require '../inc/db-helper.php';
 
 // 查询全部文章数据
 $posts = query('select * from posts');
+
+/**
+ * 将英文状态描述转换为中文
+ * @param  String $status 英文状态
+ * @return String         中文状态
+ */
+function convert_status ($status) {
+  switch ($status) {
+    case 'drafted':
+      return '草稿';
+    case 'published':
+      return '已发布';
+    case 'trashed':
+      return '回收站';
+    default:
+      return '未知';
+  }
+}
 ?>
 <div class="page-title">
   <h1>所有文章</h1>
@@ -69,7 +87,7 @@ $posts = query('select * from posts');
       <td><?php echo $item['user_id']; ?></td>
       <td><?php echo $item['category_id']; ?></td>
       <td><?php echo $item['created'] ?></td>
-      <td><?php echo $item['status']; ?></td>
+      <td><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
         <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
         <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
