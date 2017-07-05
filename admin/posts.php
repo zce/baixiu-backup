@@ -32,6 +32,16 @@ function convert_status ($status) {
       return '未知';
   }
 }
+
+/**
+ * 根据 ID 获取分类信息
+ * @param  Integer $id 分类 ID
+ * @return Array       分类信息关联数组
+ */
+function get_category ($id) {
+  $sql = "select * from categories where id = $id";
+  return query($sql)[0];
+}
 ?>
 <div class="page-title">
   <h1>所有文章</h1>
@@ -85,7 +95,7 @@ function convert_status ($status) {
       <td class="text-center"><input type="checkbox"></td>
       <td><?php echo $item['title']; ?></td>
       <td><?php echo $item['user_id']; ?></td>
-      <td><?php echo $item['category_id']; ?></td>
+      <td><?php echo get_category($item['category_id'])['name']; ?></td>
       <td><?php echo $item['created'] ?></td>
       <td><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
