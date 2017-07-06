@@ -15,6 +15,25 @@ require '../inc/db-helper.php';
 // 载入分页页码
 require '../inc/pagination-helper.php';
 
+// 处理筛选逻辑
+// ==================================================
+
+// 筛选条件
+$where = '1 = 1';
+
+// 处理分类筛选
+if (isset($_GET['cat']) && $_GET['cat'] !== 'all') {
+  $where .= ' and posts.category_id = ' . $_GET['cat'];
+}
+
+// 状态筛选
+if (isset($_GET['status']) && $_GET['status'] !== 'all') {
+  $where .= ' and posts.status = \'' . $_GET['status'] . '\'';
+}
+
+// 处理分页
+// ==================================================
+
 // 获取 querystring 中的 page 参数
 // 没有的话 默认为 1
 $page = isset($_GET['page']) ? $_GET['page'] : '1';
@@ -25,7 +44,7 @@ $page = intval($page) !== 0 ? intval($page) : 1;
 $size = 10;
 
 // 查询总条数
-$total_count = intval(query('select count(1) from posts')[0][0]);
+$total_count = intval(query('select count(1) from posts where ' . $where)[0][0]);
 
 // 计算总页数
 $total_pages = ceil($total_count / $size);
@@ -43,18 +62,8 @@ if ($page <= 0 || $page > $total_pages) {
   exit();
 }
 
-// 筛选条件
-$where = '1 = 1';
-
-// 处理分类筛选
-if (isset($_GET['cat']) && $_GET['cat'] !== 'all') {
-  $where .= ' and posts.category_id = ' . $_GET['cat'];
-}
-
-// 状态筛选
-if (isset($_GET['status']) && $_GET['status'] !== 'all') {
-  $where .= ' and posts.status = \'' . $_GET['status'] . '\'';
-}
+// 查询数据
+// ==================================================
 
 $sql = 'select
   posts.id,
@@ -74,6 +83,9 @@ $posts = query($sql);
 
 // 查询全部分类数据
 $categories = query('select * from categories');
+
+// 转换函数
+// ==================================================
 
 /**
  * 将英文状态描述转换为中文
@@ -139,7 +151,7 @@ function format_date ($created) {
   </select>
   <button class="btn btn-default btn-sm">筛选</button>
   <ul class="pagination pagination-sm pull-right">
-    <?php pagination($page, $total_pages, '?page=%d'); ?>
+    <?php pagination($page, $total_pages, '?page=%d' . (isset($_GET['cat']) ? '&cat=' . $_GET['cat'] : '') . (isset($_GET['status']) ? '&status=' . $_GET['status'] : '')); ?>
   </ul>
 </form>
 <table class="table table-striped table-bordered table-hover">
