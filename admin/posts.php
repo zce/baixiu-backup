@@ -68,7 +68,7 @@ $posts = query('select * from posts');
       <td><?php echo $item['title']; ?></td>
       <td><?php echo $item['user_id']; ?></td>
       <td><?php echo $item['category_id']; ?></td>
-      <td><?php echo $item['created'] ?></td>
+      <td><?php echo $item['created']; ?></td>
       <td><?php echo $item['status']; ?></td>
       <td class="text-center">
         <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
