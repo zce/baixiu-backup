@@ -43,6 +43,14 @@ if ($page <= 0 || $page > $total_pages) {
   exit();
 }
 
+// 筛选条件
+$where = '1 = 1';
+
+// 处理分类筛选
+if (isset($_GET['cat']) && $_GET['cat'] !== 'all') {
+  $where .= ' and posts.category_id = ' . $_GET['cat'];
+}
+
 $sql = 'select
   posts.id,
   posts.title,
@@ -53,10 +61,14 @@ $sql = 'select
 from posts
 inner join users on posts.user_id = users.id
 inner join categories on posts.category_id = categories.id
+where ' . $where . '
 limit ' . ($page - 1) * $size . ', ' . $size;
 
-// 查询全部文章数据
+// 查询文章数据
 $posts = query($sql);
+
+// 查询全部分类数据
+$categories = query('select * from categories');
 
 /**
  * 将英文状态描述转换为中文
@@ -100,15 +112,19 @@ function format_date ($created) {
     </span>
   </div>
 </div>
-<form class="form-inline" action="">
+<form class="form-inline" action="posts.php">
   <select name="" class="form-control input-sm">
     <option value="">批量操作</option>
     <option value="">删除</option>
   </select>
   <button class="btn btn-default btn-sm">应用</button>
-  <select name="" class="form-control input-sm">
-    <option value="">所有分类</option>
-    <option value="">未分类</option>
+  <select name="cat" class="form-control input-sm">
+    <option value="all">所有分类</option>
+    <?php foreach ($categories as $item) { ?>
+    <option value="<?php echo $item['id']; ?>"<?php echo isset($_GET['cat']) && $_GET['cat'] == $item['id'] ? ' selected' : ''; ?>>
+      <?php echo $item['name']; ?>
+    </option>
+    <?php } ?>
   </select>
   <select name="" class="form-control input-sm">
     <option value="">所有状态</option>
