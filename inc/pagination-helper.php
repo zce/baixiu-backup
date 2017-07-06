@@ -11,6 +11,8 @@
  * @param  Integer $page   当前页码
  * @param  Integer $total  总页数
  * @param  String  $format 链接模板，%d 会被替换为具体页数
+ * @example
+ *   <?php pagination(2, 10, '/list?page=%d'); ?>
  */
 function pagination ($page, $total, $format) {
   // 上一页
