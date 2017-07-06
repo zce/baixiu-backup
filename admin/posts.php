@@ -96,7 +96,7 @@ function get_category ($id) {
       <td><?php echo $item['title']; ?></td>
       <td><?php echo $item['user_id']; ?></td>
       <td><?php echo get_category($item['category_id'])['name']; ?></td>
-      <td><?php echo $item['created'] ?></td>
+      <td><?php echo $item['created']; ?></td>
       <td><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
         <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
