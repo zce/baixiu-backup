@@ -166,11 +166,7 @@ function format_date ($created) {
   </select>
   <button class="btn btn-default btn-sm">筛选</button>
   <ul class="pagination pagination-sm pull-right">
-    <li><a href="#">上一页</a></li>
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">下一页</a></li>
+    <?php pagination($page, $total_pages, '?page=%d', 7); ?>
   </ul>
 </form>
 <?php
