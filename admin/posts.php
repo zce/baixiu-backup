@@ -90,8 +90,8 @@ function format_date ($created) {
       <th>标题</th>
       <th>作者</th>
       <th>分类</th>
-      <th>发表时间</th>
-      <th>状态</th>
+      <th class="text-center">发表时间</th>
+      <th class="text-center">状态</th>
       <th class="text-center" width="100">操作</th>
     </tr>
   </thead>
@@ -102,8 +102,8 @@ function format_date ($created) {
       <td><?php echo $item['title']; ?></td>
       <td><?php echo $item['user_id']; ?></td>
       <td><?php echo $item['category_id']; ?></td>
-      <td><?php echo format_date($item['created']); ?></td>
-      <td><?php echo convert_status($item['status']); ?></td>
+      <td class="text-center"><?php echo format_date($item['created']); ?></td>
+      <td class="text-center"><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
         <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
         <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
