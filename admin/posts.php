@@ -76,6 +76,7 @@ from posts
 inner join users on posts.user_id = users.id
 inner join categories on posts.category_id = categories.id
 where ' . $where . '
+order by posts.created desc
 limit ' . ($page - 1) * $size . ', ' . $size;
 
 // 查询文章数据
