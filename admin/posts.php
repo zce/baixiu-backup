@@ -183,26 +183,6 @@ function format_date ($created) {
     <?php } ?>
   </tbody>
 </table>
-<form class="form-inline" action="">
-  <select name="" class="form-control input-sm">
-    <option value="">批量操作</option>
-    <option value="">删除</option>
-  </select>
-  <button class="btn btn-default btn-sm">应用</button>
-  <select name="" class="form-control input-sm">
-    <option value="">所有分类</option>
-    <option value="">未分类</option>
-  </select>
-  <select name="" class="form-control input-sm">
-    <option value="">所有状态</option>
-    <option value="">草稿</option>
-    <option value="">已发布</option>
-  </select>
-  <button class="btn btn-default btn-sm">筛选</button>
-  <ul class="pagination pagination-sm pull-right">
-    <?php pagination($page, $total_pages, '?page=%d', 7); ?>
-  </ul>
-</form>
 <?php
 $page = 'posts';
 // 载入底部
