@@ -12,7 +12,13 @@ require '../inc/admin-header.php';
 // 载入数据操作函数
 require '../inc/db-helper.php';
 
-$sql = 'select *
+$sql = 'select
+  posts.id,
+  posts.title,
+  posts.created,
+  posts.status,
+  categories.name as category_name,
+  users.nickname as author_name
 from posts
 inner join users on posts.user_id = users.id
 inner join categories on posts.category_id = categories.id';
@@ -103,8 +109,8 @@ function format_date ($created) {
     <tr>
       <td class="text-center"><input type="checkbox"></td>
       <td><?php echo $item['title']; ?></td>
-      <td><?php echo $item['nickname']; ?></td>
-      <td><?php echo $item['name']; ?></td>
+      <td><?php echo $item['author_name']; ?></td>
+      <td><?php echo $item['category_name']; ?></td>
       <td class="text-center"><?php echo format_date($item['created']); ?></td>
       <td class="text-center"><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
