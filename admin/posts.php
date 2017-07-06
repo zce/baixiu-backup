@@ -32,6 +32,22 @@ function convert_status ($status) {
       return '未知';
   }
 }
+
+/**
+ * 格式化日期
+ * @param  String $created 时间字符串
+ * @return String          格式化后的时间字符串
+ */
+function format_date ($created) {
+  // 设置默认时区！！！
+  date_default_timezone_set('UTC');
+
+  // 转换为时间戳
+  $timestamp = strtotime($created);
+
+  // 格式化并返回
+  return date('Y年m月d日 <b\r> H:i:s', $timestamp);
+} 
 ?>
 <div class="page-title">
   <h1>所有文章</h1>
@@ -86,7 +102,7 @@ function convert_status ($status) {
       <td><?php echo $item['title']; ?></td>
       <td><?php echo $item['user_id']; ?></td>
       <td><?php echo $item['category_id']; ?></td>
-      <td><?php echo $item['created']; ?></td>
+      <td><?php echo format_date($item['created']); ?></td>
       <td><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
         <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
