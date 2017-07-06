@@ -34,6 +34,20 @@ function convert_status ($status) {
 }
 
 /**
+ * 格式化日期
+ * @param  String $created 时间字符串
+ * @return String          格式化后的时间字符串
+ */
+function format_date ($created) {
+  // 设置默认时区！！！
+  date_default_timezone_set('UTC');
+  // 转换为时间戳
+  $timestamp = strtotime($created);
+  // 格式化并返回
+  return date('Y年m月d日 <b\r> H:i:s', $timestamp);
+}
+
+/**
  * 根据 ID 获取分类信息
  * @param  Integer $id 分类 ID
  * @return Array       分类信息关联数组
@@ -84,8 +98,8 @@ function get_category ($id) {
       <th>标题</th>
       <th>作者</th>
       <th>分类</th>
-      <th>发表时间</th>
-      <th>状态</th>
+      <th class="text-center">发表时间</th>
+      <th class="text-center">状态</th>
       <th class="text-center" width="100">操作</th>
     </tr>
   </thead>
@@ -96,8 +110,8 @@ function get_category ($id) {
       <td><?php echo $item['title']; ?></td>
       <td><?php echo $item['user_id']; ?></td>
       <td><?php echo get_category($item['category_id'])['name']; ?></td>
-      <td><?php echo $item['created']; ?></td>
-      <td><?php echo convert_status($item['status']); ?></td>
+      <td class="text-center"><?php echo format_date($item['created']); ?></td>
+      <td class="text-center"><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
         <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
         <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
