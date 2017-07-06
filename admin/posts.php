@@ -21,6 +21,25 @@ $page = intval($page) !== 0 ? intval($page) : 1;
 // 定义每页显示的数量
 $size = 10;
 
+// 查询总条数
+$total_count = intval(query('select count(1) from posts')[0][0]);
+
+// 计算总页数
+$total_pages = ceil($total_count / $size);
+
+// 检查 $page 范围
+if ($page <= 0 || $page > $total_pages) {
+  // 肯定不存在的页码，没有必要继续执行了
+  // 清空响应流
+  ob_clean();
+  // 设置 404 状态码
+  http_response_code(404);
+  // 界面提示
+  echo '<h1>404 Not Found</h1>';
+  // 结束执行
+  exit();
+}
+
 $sql = 'select
   posts.id,
   posts.title,
