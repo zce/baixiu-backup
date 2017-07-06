@@ -51,6 +51,11 @@ if (isset($_GET['cat']) && $_GET['cat'] !== 'all') {
   $where .= ' and posts.category_id = ' . $_GET['cat'];
 }
 
+// 状态筛选
+if (isset($_GET['status']) && $_GET['status'] !== 'all') {
+  $where .= ' and posts.status = \'' . $_GET['status'] . '\'';
+}
+
 $sql = 'select
   posts.id,
   posts.title,
@@ -126,10 +131,11 @@ function format_date ($created) {
     </option>
     <?php } ?>
   </select>
-  <select name="" class="form-control input-sm">
-    <option value="">所有状态</option>
-    <option value="">草稿</option>
-    <option value="">已发布</option>
+  <select name="status" class="form-control input-sm">
+    <option value="all">所有状态</option>
+    <option value="drafted"<?php echo isset($_GET['status']) && $_GET['status'] == 'drafted' ? ' selected' : ''; ?>>草稿</option>
+    <option value="published"<?php echo isset($_GET['status']) && $_GET['status'] == 'published' ? ' selected' : ''; ?>>已发布</option>
+    <option value="trashed"<?php echo isset($_GET['status']) && $_GET['status'] == 'trashed' ? ' selected' : ''; ?>>回收站</option>
   </select>
   <button class="btn btn-default btn-sm">筛选</button>
   <ul class="pagination pagination-sm pull-right">
