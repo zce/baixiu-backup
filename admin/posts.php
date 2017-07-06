@@ -12,6 +12,15 @@ require '../inc/admin-header.php';
 // 载入数据操作函数
 require '../inc/db-helper.php';
 
+// 获取 querystring 中的 page 参数
+// 没有的话 默认为 1
+$page = isset($_GET['page']) ? $_GET['page'] : '1';
+// 转换为整数类型
+$page = intval($page) !== 0 ? intval($page) : 1;
+
+// 定义每页显示的数量
+$size = 10;
+
 $sql = 'select
   posts.id,
   posts.title,
@@ -21,7 +30,8 @@ $sql = 'select
   users.nickname as author_name
 from posts
 inner join users on posts.user_id = users.id
-inner join categories on posts.category_id = categories.id';
+inner join categories on posts.category_id = categories.id
+limit ' . ($page - 1) * $size . ', ' . $size;
 
 // 查询全部文章数据
 $posts = query($sql);
