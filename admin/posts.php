@@ -12,8 +12,13 @@ require '../inc/admin-header.php';
 // 载入数据操作函数
 require '../inc/db-helper.php';
 
+$sql = 'select *
+from posts
+inner join users on posts.user_id = users.id
+inner join categories on posts.category_id = categories.id';
+
 // 查询全部文章数据
-$posts = query('select * from posts');
+$posts = query($sql);
 
 /**
  * 将英文状态描述转换为中文
@@ -45,26 +50,6 @@ function format_date ($created) {
   $timestamp = strtotime($created);
   // 格式化并返回
   return date('Y年m月d日 <b\r> H:i:s', $timestamp);
-}
-
-/**
- * 根据 ID 获取分类信息
- * @param  Integer $id 分类 ID
- * @return Array       分类信息关联数组
- */
-function get_category ($id) {
-  $sql = "select * from categories where id = $id";
-  return query($sql)[0];
-}
-
-/**
- * 根据 ID 获取用户信息
- * @param  Integer $id 用户 ID
- * @return Array       用户信息关联数组
- */
-function get_author ($id) {
-  $sql = "select * from users where id = $id";
-  return query($sql)[0];
 }
 ?>
 <div class="page-title">
@@ -118,8 +103,8 @@ function get_author ($id) {
     <tr>
       <td class="text-center"><input type="checkbox"></td>
       <td><?php echo $item['title']; ?></td>
-      <td><?php echo get_author($item['user_id'])['nickname']; ?></td>
-      <td><?php echo get_category($item['category_id'])['name']; ?></td>
+      <td><?php echo $item['nickname']; ?></td>
+      <td><?php echo $item['name']; ?></td>
       <td class="text-center"><?php echo format_date($item['created']); ?></td>
       <td class="text-center"><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
