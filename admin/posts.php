@@ -42,6 +42,16 @@ function get_category ($id) {
   $sql = "select * from categories where id = $id";
   return query($sql)[0];
 }
+
+/**
+ * 根据 ID 获取用户信息
+ * @param  Integer $id 用户 ID
+ * @return Array       用户信息关联数组
+ */
+function get_author ($id) {
+  $sql = "select * from users where id = $id";
+  return query($sql)[0];
+}
 ?>
 <div class="page-title">
   <h1>所有文章</h1>
@@ -94,9 +104,9 @@ function get_category ($id) {
     <tr>
       <td class="text-center"><input type="checkbox"></td>
       <td><?php echo $item['title']; ?></td>
-      <td><?php echo $item['user_id']; ?></td>
+      <td><?php echo get_author($item['user_id'])['nickname']; ?></td>
       <td><?php echo get_category($item['category_id'])['name']; ?></td>
-      <td><?php echo $item['created'] ?></td>
+      <td><?php echo $item['created']; ?></td>
       <td><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
         <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
