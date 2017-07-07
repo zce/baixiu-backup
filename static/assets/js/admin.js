@@ -9,13 +9,13 @@ $(function ($) {
     // 找到每一个选中的文章
     $tdCheckbox.each(function (i, item) {
       if ($(item).prop('checked')) {
+        // 通过 checkbox 上的 data-id 获取到当前对应的文章 ID
         var id = parseInt($(item).data('id'))
         id && items.push(id)
       }
     })
     // 有选中就显示，没选中就隐藏
     items.length ? $btnDelete.fadeIn() : $btnDelete.fadeOut()
-
     // 批量删除按钮链接参数
     $btnDelete.prop('search', '?items=' + items.join(','))
     console.log($btnDelete.prop('search'))
