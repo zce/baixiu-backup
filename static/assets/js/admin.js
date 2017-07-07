@@ -1,9 +1,9 @@
 $(function ($) {
   var $tdCheckbox = $('td > input[type=checkbox]')
   var $thCheckbox = $('th > input[type=checkbox]')
+  var $btnDelete = $('#delete')
 
   $tdCheckbox.on('change', function () {
-    var $btnDelete = $('#delete')
     // 要删除的文章 ID
     var items = []
     // 找到每一个选中的文章
