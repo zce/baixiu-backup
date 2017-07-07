@@ -59,3 +59,25 @@ function query ($sql) {
   // 返回数据
   return $data;
 }
+
+/**
+ * 执行一个非查询语句，返回执行语句后受影响的行数
+ * @param  String  $sql 非查询语句
+ * @return Integer      执行语句后受影响的行数
+ */
+function execute ($sql) {
+  // 获取与数据库之间的连接
+  $connection = connect();
+
+  // 执行 SQL 语句，获取一个查询对象
+  $result = mysqli_query($connection, $sql);
+
+  // 获取执行语句后受影响的行数
+  $affected_rows = mysqli_affected_rows($connection);
+
+  // 关闭数据库连接
+  mysqli_close($connection);
+
+  // 返回受影响行数
+  return $affected_rows;
+}

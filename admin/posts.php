@@ -1,6 +1,6 @@
 <?php
 /**
- * 后台入口
+ * 文章列表
  *
  * @since   0.1.0 初始化
  * @version 0.1.0 初始化
@@ -178,7 +178,7 @@ function format_date ($created) {
       <td class="text-center"><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
         <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
-        <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+        <a href="post-delete.php?items=<?php echo $item['id']; ?>" class="btn btn-danger btn-xs">删除</a>
       </td>
     </tr>
     <?php } ?>
