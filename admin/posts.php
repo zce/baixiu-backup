@@ -131,11 +131,8 @@ function format_date ($created) {
   </div>
 </div>
 <form class="form-inline" action="posts.php">
-  <select name="" class="form-control input-sm">
-    <option value="">批量操作</option>
-    <option value="">删除</option>
-  </select>
-  <button class="btn btn-default btn-sm">应用</button>
+  <!-- show when multiple checked -->
+  <a id="delete" class="btn btn-danger btn-sm" href="post-delete.php?items=" style="display: none">批量删除</a>
   <select name="cat" class="form-control input-sm">
     <option value="all">所有分类</option>
     <?php foreach ($categories as $item) { ?>
@@ -158,7 +155,7 @@ function format_date ($created) {
 <table class="table table-striped table-bordered table-hover">
   <thead>
     <tr>
-      <th class="text-center" width="40"><input type="checkbox"></th>
+      <th class="text-center" width="40"><input type="checkbox" value="true"></th>
       <th>标题</th>
       <th>作者</th>
       <th>分类</th>
@@ -170,7 +167,7 @@ function format_date ($created) {
   <tbody>
     <?php foreach ($posts as $i => $item) { ?>
     <tr>
-      <td class="text-center"><input type="checkbox"></td>
+      <td class="text-center"><input type="checkbox" data-id="<?php echo $item['id']; ?>"></td>
       <td><?php echo $item['title']; ?></td>
       <td><?php echo $item['author_name']; ?></td>
       <td><?php echo $item['category_name']; ?></td>

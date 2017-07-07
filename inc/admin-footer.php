@@ -53,6 +53,7 @@
 
   <script src="/static/assets/vendors/jquery/jquery.min.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/static/assets/js/admin.js"></script>
   <script>NProgress.done()</script>
 </body>
 </html>

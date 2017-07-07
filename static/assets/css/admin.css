@@ -237,6 +237,7 @@ a:focus {
 
 .main .body .form-inline {
   margin-bottom: 15px;
+  overflow: hidden;
 }
 
 .main .body .form-inline .btn {
