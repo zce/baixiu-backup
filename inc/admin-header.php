@@ -41,7 +41,7 @@ if (!isset($is_login) || $is_login !== true) {
           </div>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i>个人中心</a></li>
-            <li><a href="login.html"><i class="glyphicon glyphicon-off"></i>退出</a></li>
+            <li><a href="logout.php"><i class="glyphicon glyphicon-off"></i>退出</a></li>
           </ul>
         </nav>
       </div>

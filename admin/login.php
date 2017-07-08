@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // 记住登录状态
         $_SESSION['is_login'] = true;
+        $_SESSION['current_user_id'] = $row['id'];
 
         // 跳转到后台首页
         header('Location: /admin/');
@@ -92,11 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <?php endif; ?>
         <div class="form-group form-group-lg">
-          <label for="username" class="sr-only">用户名</label>
+          <label for="username" class="sr-only">邮箱</label>
           <?php if (isset($username)) : ?>
-          <input id="username" name="username" type="text" class="form-control" placeholder="用户名" value="<?php echo $username; ?>" autofocus>
+          <input id="username" name="username" type="email" class="form-control" placeholder="邮箱" value="<?php echo $username; ?>" autofocus>
           <?php else : ?>
-          <input id="username" name="username" type="text" class="form-control" placeholder="用户名" autofocus>
+          <input id="username" name="username" type="email" class="form-control" placeholder="邮箱" autofocus>
           <?php endif; ?>
         </div>
         <div class="form-group form-group-lg">

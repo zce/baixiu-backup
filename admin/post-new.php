@@ -12,25 +12,55 @@ require '../inc/admin-header.php';
 // 载入封装的 query 函数
 require '../inc/db-helper.php';
 
-// 文章总数
-$post_count = query('select count(1) from posts')[0][0];
+// 载入工具函数
+require '../inc/utils.php';
 
-// 草稿总数
-$draft_count = query('select count(1) from posts where status = \'drafted\'')[0][0];
+// 如果是表单提交，则保存数据
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  // 接收文件
+  $feature = null;
+  if (isset($_FILES['feature']) && $_FILES['feature']['size']) {
+    // 保存文件到上传目录
+    if (move_uploaded_file($_FILES['feature']['tmp_name'], '../static/uploads/' . $_FILES['feature']['name'])) {
+      $feature = '/static/uploads/' . $_FILES['feature']['name'];
+    }
+  }
 
-// 分类总数
-$category_count = query('select count(1) from categories')[0][0];
+  // 接收其他参数拼接 SQL
+  $sql = sprintf(
+    "insert into posts values (null, '%s', '%s', '%s', '%s', '%s', '%s', null, %d, %d)",
+    $_POST['slug'],
+    $_POST['title'],
+    $feature,
+    $_POST['created'],
+    $_POST['content'],
+    $_POST['status'],
+    $_SESSION['current_user_id'],
+    $_POST['category']
+  );
 
-// 评论总数
-$comment_count = query('select count(1) from comments')[0][0];
+  // 执行 SQL
+  if (execute($sql) > 0) {
+    // 跳转
+    header('Location: posts.php');
+    exit();
+  } else {
+    $message = '保存失败，请完整填写或修改 slug';
+  }
+}
 
-// 待审核的评论总数
-$held_count = query('select count(1) from comments where status = \'held\'')[0][0];
+// 查询全部分类数据
+$categories = query('select * from categories');
 ?>
 <div class="page-title">
   <h1>写文章</h1>
 </div>
-<form class="row" action="#" method="post">
+<?php if (isset($message)) : ?>
+<div class="alert alert-danger">
+  <strong>错误！</strong><?php echo $message; ?>
+</div>
+<?php endif; ?>
+<form class="row" action="post-new.php" method="post" enctype="multipart/form-data">
   <div class="col-md-9">
     <div class="form-group">
       <label for="title">标题</label>
@@ -45,7 +75,7 @@ $held_count = query('select count(1) from comments where status = \'held\'')[0][
     <div class="form-group">
       <label for="slug">Slug</label>
       <input id="slug" class="form-control" name="slug" type="text" placeholder="slug">
-      <p class="help-block">https://zce.me/post/<strong>slug</strong>/</p>
+      <p class="help-block"><?php echo get_root_url(); ?>/post/<strong>slug</strong>/</p>
     </div>
     <div class="form-group">
       <label for="feature">特色图像</label>
@@ -56,8 +86,9 @@ $held_count = query('select count(1) from comments where status = \'held\'')[0][
     <div class="form-group">
       <label for="category">所属分类</label>
       <select id="category" class="form-control" name="category">
-        <option value="1">未分类</option>
-        <option value="2">潮生活</option>
+        <?php foreach ($categories as $item) { ?>
+        <option value="<?php echo $item['id']; ?>"><?php echo $item['name']; ?></option>
+        <?php } ?>
       </select>
     </div>
     <div class="form-group">
