@@ -32,4 +32,12 @@ $(function ($) {
     element: editor,
     spellChecker: false
   })
+
+  // 本地图片预览
+  $('#feature').on('change', function () {
+    // 为选中的文件对象创建一个临时的 URL
+    var url = window.URL.createObjectURL(this.files[0])
+    // 显示这个图片
+    $(this).siblings('.help-block').attr('src', url).fadeIn()
+  })
 })
