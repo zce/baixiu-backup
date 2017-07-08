@@ -46,4 +46,12 @@ $(function ($) {
     var slug = $(this).val() || 'slug'
     $(this).siblings('.help-block').children().text(slug)
   })
+
+  // 编辑分类
+  $('.edit-cat').on('click', function () {
+    $('#form_category #id').val($(this).data('id'))
+    $('#form_category #slug').val($(this).data('slug')).trigger('input')
+    $('#form_category #name').val($(this).data('name'))
+    $('#form_category button').text('保存')
+  })
 })
