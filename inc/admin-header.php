@@ -25,6 +25,7 @@ if (!isset($is_login) || $is_login !== true) {
   <title>后台管理系统</title>
   <link rel="stylesheet" href="/static/assets/vendors/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/static/assets/vendors/nprogress/nprogress.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
   <link rel="stylesheet" href="/static/assets/css/admin.css">
   <script src="/static/assets/vendors/nprogress/nprogress.js"></script>
 </head>

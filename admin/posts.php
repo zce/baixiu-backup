@@ -122,7 +122,7 @@ function format_date ($created) {
 ?>
 <div class="page-title">
   <h1>所有文章</h1>
-  <a href="post-new.html" class="btn btn-primary btn-xs">写文章</a>
+  <a href="post-new.php" class="btn btn-primary btn-xs">写文章</a>
   <div class="input-group pull-right">
     <input type="text" class="form-control" placeholder="搜索文章标题">
     <span class="input-group-btn">
@@ -174,7 +174,7 @@ function format_date ($created) {
       <td class="text-center"><?php echo format_date($item['created']); ?></td>
       <td class="text-center"><?php echo convert_status($item['status']); ?></td>
       <td class="text-center">
-        <a href="post-new.html" class="btn btn-default btn-xs">编辑</a>
+        <a href="post-new.php" class="btn btn-default btn-xs">编辑</a>
         <a href="post-delete.php?items=<?php echo $item['id']; ?>" class="btn btn-danger btn-xs">删除</a>
       </td>
     </tr>

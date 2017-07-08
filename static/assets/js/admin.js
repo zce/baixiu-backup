@@ -18,12 +18,18 @@ $(function ($) {
     items.length ? $btnDelete.fadeIn() : $btnDelete.fadeOut()
     // 批量删除按钮链接参数
     $btnDelete.prop('search', '?items=' + items.join(','))
-    console.log($btnDelete.prop('search'))
   })
 
   // 全选 / 全不选
   $thCheckbox.on('change', function () {
     var checked = $(this).prop('checked')
     $tdCheckbox.prop('checked', checked).trigger('change')
+  })
+
+  // Markdown 编辑器
+  var editor = document.getElementById('content')
+  editor && new SimpleMDE({
+    element: editor,
+    spellChecker: false
   })
 })
