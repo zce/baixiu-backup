@@ -40,4 +40,10 @@ $(function ($) {
     // 显示这个图片
     $(this).siblings('.help-block').attr('src', url).fadeIn()
   })
+
+  // URL 预览
+  $('#slug').on('input', function () {
+    var slug = $(this).val() || 'slug'
+    $(this).siblings('.help-block').children().text(slug)
+  })
 })
