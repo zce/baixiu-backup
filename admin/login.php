@@ -8,7 +8,7 @@ require '../functions.php';
 // 判断是否为表单提交请求
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // 是表单提交，接收表单数据，执行登录校验逻辑
-  if (!isset($_POST['email']) || $_POST['email'] == '' || !isset($_POST['password']) || $_POST['password'] == '') {
+  if (empty($_POST['email']) || empty($_POST['password'])) {
     // 没有正确填写表单，错误提示
     $message = '请正确填写表单！';
   } else {
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <title>Sign in « Admin</title>
+  <title>Sign in &laquo; Admin</title>
   <link rel="stylesheet" href="/static/assets/vendors/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/static/assets/css/admin.css">
 </head>

@@ -8,7 +8,7 @@ require_once 'config.php';
 
 /**
  * 建立数据库连接
- * @return MySQLi 数据库连接对象
+ * @return mysqli 数据库连接对象
  */
 function connect () {
   // 建立与数据库的连接
@@ -25,8 +25,8 @@ function connect () {
 
 /**
  * 执行一个查询语句，返回查询到的数据
- * @param  String $sql SQL 语句
- * @return Array       查询到的数据
+ * @param  string $sql SQL 语句
+ * @return array       查询到的数据
  */
 function query ($sql) {
   // 获取与数据库之间的连接
@@ -58,8 +58,8 @@ function query ($sql) {
 
 /**
  * 执行一个非查询语句，返回执行语句后受影响的行数
- * @param  String  $sql 非查询语句
- * @return Integer      执行语句后受影响的行数
+ * @param  string  $sql 非查询语句
+ * @return integer      执行语句后受影响的行数
  */
 function execute ($sql) {
   // 获取与数据库之间的连接
@@ -105,10 +105,10 @@ function get_user_info () {
 
 /**
  * 输出分页链接
- * @param  Integer $page    当前页码
- * @param  Integer $total   总页数
- * @param  String  $format  链接模板，%d 会被替换为具体页数
- * @param  Integet $visible 可见页码数量（可选参数，默认为 5）
+ * @param  integer $page    当前页码
+ * @param  integer $total   总页数
+ * @param  string  $format  链接模板，%d 会被替换为具体页数
+ * @param  integer $visible 可见页码数量（可选参数，默认为 5）
  * @example
  *   <?php pagination(2, 10, '/list?page=%d', 5); ?>
  */
@@ -131,7 +131,12 @@ function pagination ($page, $total, $format, $visible = 5) {
 
   // 上一页
   if ($page - 1 > 0) {
-    printf('<li><a href="%s">上一页</a></li>', sprintf($format, $page - 1));
+    printf('<li><a href="%s">&laquo;</a></li>', sprintf($format, $page - 1));
+  }
+
+  // 省略号
+  if ($begin > 1) {
+    print('<li class="disabled"><span>···</span></li>');
   }
 
   // 数字页码
@@ -141,8 +146,13 @@ function pagination ($page, $total, $format, $visible = 5) {
     printf('<li%s><a href="%s">%d</a></li>', $activeClass, sprintf($format, $i), $i);
   }
 
+  // 省略号
+  if ($end < $total) {
+    print('<li class="disabled"><span>···</span></li>');
+  }
+
   // 下一页
   if ($page + 1 <= $total) {
-    printf('<li><a href="%s">下一页</a></li>', sprintf($format, $page + 1));
+    printf('<li><a href="%s">&raquo;</a></li>', sprintf($format, $page + 1));
   }
 }

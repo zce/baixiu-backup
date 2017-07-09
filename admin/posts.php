@@ -117,7 +117,7 @@ function format_date ($created) {
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <title>Dashboard « Admin</title>
+  <title>Dashboard &laquo; Admin</title>
   <link rel="stylesheet" href="/static/assets/vendors/bootstrap/css/bootstrap.css">
   <link rel="stylesheet" href="/static/assets/vendors/font-awesome/css/font-awesome.css">
   <link rel="stylesheet" href="/static/assets/vendors/nprogress/nprogress.css">
@@ -132,7 +132,7 @@ function format_date ($created) {
       <button class="btn btn-default navbar-btn fa fa-bars"></button>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="profile.php"><i class="fa fa-user"></i>个人中心</a></li>
-        <li><a href="login.php"><i class="fa fa-sign-out"></i>退出</a></li>
+        <li><a href="logout.php"><i class="fa fa-sign-out"></i>退出</a></li>
       </ul>
     </nav>
     <div class="container-fluid">
@@ -146,7 +146,7 @@ function format_date ($created) {
       </div> -->
       <div class="page-action">
         <!-- show when multiple checked -->
-        <a class="btn btn-danger btn-sm" href="post-delete.php?items=" style="display: none">批量删除</a>
+        <a class="btn btn-danger btn-sm btn-delete" href="post-delete.php?items=" style="display: none">批量删除</a>
         <form class="form-inline" action="posts.php" method="get">
           <select name="c" class="form-control input-sm">
             <option value="all">所有分类</option>
@@ -175,8 +175,8 @@ function format_date ($created) {
             <th>标题</th>
             <th>作者</th>
             <th>分类</th>
-            <th>发表时间</th>
-            <th>状态</th>
+            <th class="text-center">发表时间</th>
+            <th class="text-center">状态</th>
             <th class="text-center" width="100">操作</th>
           </tr>
         </thead>
@@ -204,6 +204,36 @@ function format_date ($created) {
 
   <script src="/static/assets/vendors/jquery/jquery.min.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
+  <script>
+    $(function () {
+      var $tdCheckbox = $('td > input[type=checkbox]')
+      var $thCheckbox = $('th > input[type=checkbox]')
+      var $btnDelete = $('.btn-delete')
+
+      $tdCheckbox.on('change', function () {
+        // 要删除的文章 ID
+        var items = []
+        // 找到每一个选中的文章
+        $tdCheckbox.each(function (i, item) {
+          if ($(item).prop('checked')) {
+            // 通过 checkbox 上的 data-id 获取到当前对应的文章 ID
+            var id = parseInt($(item).data('id'))
+            id && items.push(id)
+          }
+        })
+        // 有选中就显示，没选中就隐藏
+        items.length ? $btnDelete.fadeIn() : $btnDelete.fadeOut()
+        // 批量删除按钮链接参数
+        $btnDelete.prop('search', '?items=' + items.join(','))
+      })
+
+      // 全选 / 全不选
+      $thCheckbox.on('change', function () {
+        var checked = $(this).prop('checked')
+        $tdCheckbox.prop('checked', checked).trigger('change')
+      })
+    })
+  </script>
   <script>NProgress.done()</script>
 </body>
 </html>

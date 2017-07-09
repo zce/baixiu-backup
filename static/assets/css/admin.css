@@ -196,12 +196,13 @@ body {
   margin-bottom: 10px;
 }
 
+.main .container-fluid .page-action .btn-batch,
 .main .container-fluid .page-action .form-inline {
   display: inline-block;
 }
 
 .main .container-fluid .page-action .btn {
-  margin-right: 15px;
+  margin-right: 10px;
 }
 
 .main .container-fluid .pagination {
@@ -308,6 +309,10 @@ body {
 
 .main .container-fluid .form-image:hover i {
   opacity: .6;
+}
+
+.main .container-fluid .thumbnail {
+  width: 100%;
 }
 
 .login {

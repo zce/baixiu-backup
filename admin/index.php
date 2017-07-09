@@ -31,7 +31,7 @@ $held_count = query('select count(1) from comments where status = \'held\'')[0][
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <title>Dashboard « Admin</title>
+  <title>Dashboard &laquo; Admin</title>
   <link rel="stylesheet" href="/static/assets/vendors/bootstrap/css/bootstrap.css">
   <link rel="stylesheet" href="/static/assets/vendors/font-awesome/css/font-awesome.css">
   <link rel="stylesheet" href="/static/assets/vendors/nprogress/nprogress.css">
@@ -46,7 +46,7 @@ $held_count = query('select count(1) from comments where status = \'held\'')[0][
       <button class="btn btn-default navbar-btn fa fa-bars"></button>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="profile.php"><i class="fa fa-user"></i>个人中心</a></li>
-        <li><a href="login.php"><i class="fa fa-sign-out"></i>退出</a></li>
+        <li><a href="logout.php"><i class="fa fa-sign-out"></i>退出</a></li>
       </ul>
     </nav>
     <div class="container-fluid">
