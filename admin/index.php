@@ -32,9 +32,8 @@ $held_count = query('select count(1) from comments where status = \'held\'')[0][
 <head>
   <meta charset="utf-8">
   <title>Dashboard « Admin</title>
-  <link rel="stylesheet" href="/static/assets/vendors/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/assets/vendors/bootstrap/css/bootstrap.css">
   <link rel="stylesheet" href="/static/assets/vendors/font-awesome/css/font-awesome.css">
-  <link rel="stylesheet" href="/static/assets/vendors/simplemde/simplemde.min.css">
   <link rel="stylesheet" href="/static/assets/vendors/nprogress/nprogress.css">
   <link rel="stylesheet" href="/static/assets/css/admin.css">
   <script src="/static/assets/vendors/nprogress/nprogress.js"></script>
@@ -77,9 +76,8 @@ $held_count = query('select count(1) from comments where status = \'held\'')[0][
 
   <?php require 'inc/aside.php'; ?>
 
-  <script src="/static/assets/vendors/jquery/jquery.min.js"></script>
-  <script src="/static/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/static/assets/vendors/simplemde/simplemde.min.js"></script>
+  <script src="/static/assets/vendors/jquery/jquery.js"></script>
+  <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>
   <script>NProgress.done()</script>
 </body>
 </html>

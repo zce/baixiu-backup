@@ -1,11 +1,24 @@
+<?php
+/**
+ * 导航菜单管理
+ */
+
+require '../functions.php';
+
+// 定义当前页面标识变量，用于在 `aside.php` 文件中区分
+$current_page = 'nav-menus';
+
+// 获取当前登录用户（登录状态检查）
+$current_user = get_user_info();
+
+?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <title>Navigation menus « Admin</title>
-  <link rel="stylesheet" href="/static/assets/vendors/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/assets/vendors/bootstrap/css/bootstrap.css">
   <link rel="stylesheet" href="/static/assets/vendors/font-awesome/css/font-awesome.css">
-  <link rel="stylesheet" href="/static/assets/vendors/simplemde/simplemde.min.css">
   <link rel="stylesheet" href="/static/assets/vendors/nprogress/nprogress.css">
   <link rel="stylesheet" href="/static/assets/css/admin.css">
   <script src="/static/assets/vendors/nprogress/nprogress.js"></script>
@@ -103,47 +116,10 @@
     </div>
   </div>
 
-  <div class="aside">
-    <div class="profile">
-      <img class="avatar img-circle" src="/static/uploads/avatar.jpg">
-      <h3 class="name">布头儿</h3>
-    </div>
-    <ul class="nav">
-      <li>
-        <a href="index.php"><i class="fa fa-dashboard"></i>仪表盘</a>
-      </li>
-      <li>
-        <a href="#menu-posts" class="collapsed" data-toggle="collapse">
-          <i class="fa fa-thumb-tack"></i>文章<i class="fa fa-angle-right"></i>
-        </a>
-        <ul id="menu-posts" class="collapse">
-          <li><a href="posts.php">所有文章</a></li>
-          <li><a href="post-add.php">写文章</a></li>
-          <li><a href="categories.php">分类目录</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="comments.php"><i class="fa fa-comments"></i>评论</a>
-      </li>
-      <li>
-        <a href="users.php"><i class="fa fa-users"></i>用户</a>
-      </li>
-      <li class="active">
-        <a href="#menu-settings" data-toggle="collapse">
-          <i class="fa fa-cog"></i>设置<i class="fa fa-angle-right"></i>
-        </a>
-        <ul id="menu-settings" class="collapse in">
-          <li class="active"><a href="nav-menus.php">导航菜单</a></li>
-          <li><a href="slides.php">图片轮播</a></li>
-          <li><a href="settings.php">网站设置</a></li>
-        </ul>
-      </li>
-    </ul>
-  </div>
+  <?php require 'inc/aside.php'; ?>
 
-  <script src="/static/assets/vendors/jquery/jquery.min.js"></script>
-  <script src="/static/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/static/assets/vendors/simplemde/simplemde.min.js"></script>
+  <script src="/static/assets/vendors/jquery/jquery.js"></script>
+  <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>
   <script>NProgress.done()</script>
 </body>
 </html>

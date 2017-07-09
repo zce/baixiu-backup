@@ -11,15 +11,115 @@ $current_page = 'posts';
 // 获取当前登录用户（登录状态检查）
 $current_user = get_user_info();
 
+// 处理筛选逻辑
+// ==================================================
+
+// 筛选条件（默认为 1 = 1，相当于没有条件）
+$where = '1 = 1';
+$query = '';
+
+// 处理分类筛选参数
+if (!empty($_GET['c']) && $_GET['c'] != 'all') {
+  $where .= ' and posts.category_id = ' . $_GET['c'];
+  $query .= '&c=' . $_GET['c'];
+}
+
+// 状态筛选参数
+if (!empty($_GET['s']) && $_GET['s'] != 'all') {
+  $where .= ' and posts.status = \'' . $_GET['s'] . '\'';
+  $query .= '&s=' . $_GET['s'];
+}
+
+// 处理分页
+// ==================================================
+
+// 定义每页显示的数量
+$size = 10;
+
+// 获取page 参数 没有的话 默认为 1
+$page = isset($_GET['p']) ? intval($_GET['p']) : 1;
+
+// 查询总条数
+$total_count = intval(query('select count(1) from posts where ' . $where)[0][0]);
+
+// 计算总页数
+$total_pages = ceil($total_count / $size);
+
+// 检查 $page 范围
+if ($page <= 0) {
+  // 跳转到第一页
+  header('Location: /admin/posts.php?p=1' . $query);
+  exit;
+}
+if ($page > $total_pages) {
+  // 跳转到最后一页
+  header('Location: /admin/posts.php?p=' . $total_pages . $query);
+  exit;
+}
+
+// 查询数据
+// ==================================================
+
+// 查询文章数据
+$posts = query('select
+  posts.id,
+  posts.title,
+  posts.created,
+  posts.status,
+  categories.name as category_name,
+  users.nickname as author_name
+from posts
+inner join users on posts.user_id = users.id
+inner join categories on posts.category_id = categories.id
+where ' . $where . '
+order by posts.created desc
+limit ' . ($page - 1) * $size . ', ' . $size);
+
+// 查询全部分类数据
+$categories = query('select * from categories');
+
+// 转换函数
+// ==================================================
+
+/**
+ * 将英文状态描述转换为中文
+ * @param  String $status 英文状态
+ * @return String         中文状态
+ */
+function convert_status ($status) {
+  switch ($status) {
+    case 'drafted':
+      return '草稿';
+    case 'published':
+      return '已发布';
+    case 'trashed':
+      return '回收站';
+    default:
+      return '未知';
+  }
+}
+
+/**
+ * 格式化日期
+ * @param  String $created 时间字符串
+ * @return String          格式化后的时间字符串
+ */
+function format_date ($created) {
+  // 设置默认时区！！！
+  date_default_timezone_set('UTC');
+  // 转换为时间戳
+  $timestamp = strtotime($created);
+  // 格式化并返回
+  return date('Y年m月d日 <b\r> H:i:s', $timestamp);
+}
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <title>Dashboard « Admin</title>
-  <link rel="stylesheet" href="/static/assets/vendors/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/assets/vendors/bootstrap/css/bootstrap.css">
   <link rel="stylesheet" href="/static/assets/vendors/font-awesome/css/font-awesome.css">
-  <link rel="stylesheet" href="/static/assets/vendors/simplemde/simplemde.min.css">
   <link rel="stylesheet" href="/static/assets/vendors/nprogress/nprogress.css">
   <link rel="stylesheet" href="/static/assets/css/admin.css">
   <script src="/static/assets/vendors/nprogress/nprogress.js"></script>
@@ -39,12 +139,6 @@ $current_user = get_user_info();
       <div class="page-title">
         <h1>所有文章</h1>
         <a href="post-add.php" class="btn btn-primary btn-xs">写文章</a>
-        <div class="input-group pull-right">
-          <input type="text" class="form-control" placeholder="搜索文章标题">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button">搜索</button>
-          </span>
-        </div>
       </div>
       <!-- 有错误信息时展示 -->
       <!-- <div class="alert alert-danger">
@@ -53,24 +147,25 @@ $current_user = get_user_info();
       <div class="page-action">
         <!-- show when multiple checked -->
         <a class="btn btn-danger btn-sm" href="post-delete.php?items=" style="display: none">批量删除</a>
-        <form class="form-inline">
-          <select name="" class="form-control input-sm">
-            <option value="">所有分类</option>
-            <option value="">未分类</option>
+        <form class="form-inline" action="posts.php" method="get">
+          <select name="c" class="form-control input-sm">
+            <option value="all">所有分类</option>
+            <?php foreach ($categories as $item) { ?>
+            <option value="<?php echo $item['id']; ?>"<?php echo isset($_GET['c']) && $_GET['c'] == $item['id'] ? ' selected' : ''; ?>>
+              <?php echo $item['name']; ?>
+            </option>
+            <?php } ?>
           </select>
-          <select name="" class="form-control input-sm">
-            <option value="">所有状态</option>
-            <option value="">草稿</option>
-            <option value="">已发布</option>
+          <select name="s" class="form-control input-sm">
+            <option value="all">所有状态</option>
+            <option value="drafted"<?php echo isset($_GET['s']) && $_GET['s'] == 'drafted' ? ' selected' : ''; ?>>草稿</option>
+            <option value="published"<?php echo isset($_GET['s']) && $_GET['s'] == 'published' ? ' selected' : ''; ?>>已发布</option>
+            <option value="trashed"<?php echo isset($_GET['s']) && $_GET['s'] == 'trashed' ? ' selected' : ''; ?>>回收站</option>
           </select>
-          <button class="btn btn-default btn-sm">筛选</button>
+          <button type="submit" class="btn btn-default btn-sm">筛选</button>
         </form>
         <ul class="pagination pagination-sm pull-right">
-          <li><a href="#">上一页</a></li>
-          <li><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">下一页</a></li>
+          <?php pagination($page, $total_pages, '?p=%d' . $query); ?>
         </ul>
       </div>
       <table class="table table-striped table-bordered table-hover">
@@ -86,42 +181,20 @@ $current_user = get_user_info();
           </tr>
         </thead>
         <tbody>
+          <?php foreach ($posts as $item) { ?>
           <tr>
-            <td class="text-center"><input type="checkbox"></td>
-            <td>随便一个名称</td>
-            <td>小小</td>
-            <td>潮科技</td>
-            <td>2016/10/07</td>
-            <td>已发布</td>
+            <td class="text-center"><input type="checkbox" data-id="<?php echo $item['id']; ?>"></td>
+            <td><?php echo $item['title']; ?></td>
+            <td><?php echo $item['author_name']; ?></td>
+            <td><?php echo $item['category_name']; ?></td>
+            <td class="text-center"><?php echo format_date($item['created']); ?></td>
+            <td class="text-center"><?php echo convert_status($item['status']); ?></td>
             <td class="text-center">
-              <a href="post-add.php" class="btn btn-default btn-xs">编辑</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+              <a href="post-edit.php?item=<?php echo $item['id']; ?>" class="btn btn-default btn-xs">编辑</a>
+              <a href="post-delete.php?items=<?php echo $item['id']; ?>" class="btn btn-danger btn-xs">删除</a>
             </td>
           </tr>
-          <tr>
-            <td class="text-center"><input type="checkbox"></td>
-            <td>随便一个名称</td>
-            <td>小小</td>
-            <td>潮科技</td>
-            <td>2016/10/07</td>
-            <td>已发布</td>
-            <td class="text-center">
-              <a href="post-add.php" class="btn btn-default btn-xs">编辑</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="text-center"><input type="checkbox"></td>
-            <td>随便一个名称</td>
-            <td>小小</td>
-            <td>潮科技</td>
-            <td>2016/10/07</td>
-            <td>已发布</td>
-            <td class="text-center">
-              <a href="post-add.php" class="btn btn-default btn-xs">编辑</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
+          <?php } ?>
         </tbody>
       </table>
     </div>
@@ -131,7 +204,6 @@ $current_user = get_user_info();
 
   <script src="/static/assets/vendors/jquery/jquery.min.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/static/assets/vendors/simplemde/simplemde.min.js"></script>
   <script>NProgress.done()</script>
 </body>
 </html>
