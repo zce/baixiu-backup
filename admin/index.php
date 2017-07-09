@@ -1,3 +1,32 @@
+<?php
+/**
+ * 管理后台首页
+ */
+
+require '../functions.php';
+
+// 定义当前页面标识变量，用于在 `aside.php` 文件中区分
+$current_page = 'dashboard';
+
+// 获取当前登录用户（登录状态检查）
+$current_user = get_user_info();
+
+// 文章总数
+$post_count = query('select count(1) from posts')[0][0];
+
+// 草稿总数
+$draft_count = query('select count(1) from posts where status = \'drafted\'')[0][0];
+
+// 分类总数
+$category_count = query('select count(1) from categories')[0][0];
+
+// 评论总数
+$comment_count = query('select count(1) from comments')[0][0];
+
+// 待审核的评论总数
+$held_count = query('select count(1) from comments where status = \'held\'')[0][0];
+
+?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -34,9 +63,9 @@
               <h3 class="panel-title">站点内容统计：</h3>
             </div>
             <ul class="list-group">
-              <li class="list-group-item"><strong>10</strong>篇文章（<strong>2</strong>篇草稿）</li>
-              <li class="list-group-item"><strong>6</strong>个分类</li>
-              <li class="list-group-item"><strong>5</strong>条评论（<strong>1</strong>条待审核）</li>
+              <li class="list-group-item"><strong><?php echo $comment_count; ?></strong>条评论（<strong><?php echo $held_count; ?></strong>条待审核）</li>
+              <li class="list-group-item"><strong><?php echo $post_count; ?></strong>篇文章（<strong><?php echo $draft_count; ?></strong>篇草稿）</li>
+              <li class="list-group-item"><strong><?php echo $category_count; ?></strong>个分类</li>
             </ul>
           </div>
         </div>
@@ -46,43 +75,7 @@
     </div>
   </div>
 
-  <div class="aside">
-    <div class="profile">
-      <img class="avatar img-circle" src="/static/uploads/avatar.jpg">
-      <h3 class="name">布头儿</h3>
-    </div>
-    <ul class="nav">
-      <li class="active">
-        <a href="index.php"><i class="fa fa-dashboard"></i>仪表盘</a>
-      </li>
-      <li>
-        <a href="#menu-posts" class="collapsed" data-toggle="collapse">
-          <i class="fa fa-thumb-tack"></i>文章<i class="fa fa-angle-right"></i>
-        </a>
-        <ul id="menu-posts" class="collapse">
-          <li><a href="posts.php">所有文章</a></li>
-          <li><a href="post-add.php">写文章</a></li>
-          <li><a href="categories.php">分类目录</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="comments.php"><i class="fa fa-comments"></i>评论</a>
-      </li>
-      <li>
-        <a href="users.php"><i class="fa fa-users"></i>用户</a>
-      </li>
-      <li>
-        <a href="#menu-settings" class="collapsed" data-toggle="collapse">
-          <i class="fa fa-cog"></i>设置<i class="fa fa-angle-right"></i>
-        </a>
-        <ul id="menu-settings" class="collapse">
-          <li><a href="nav-menus.php">导航菜单</a></li>
-          <li><a href="slides.php">图片轮播</a></li>
-          <li><a href="settings.php">网站设置</a></li>
-        </ul>
-      </li>
-    </ul>
-  </div>
+  <?php require 'inc/aside.php'; ?>
 
   <script src="/static/assets/vendors/jquery/jquery.min.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.min.js"></script>

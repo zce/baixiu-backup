@@ -3,7 +3,7 @@
  * 登录页
  */
 
-require '../config.php';
+require '../functions.php';
 
 // 判断是否为表单提交请求
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -16,31 +16,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // 2. 连接数据库查询用户是否存在
+    // 2. 连接数据库根据邮箱查询用户
+    $data = query(sprintf("select * from users where email = '%s' limit 1;", $email));
 
-    // 建立与数据库的连接
-    $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-    // 如果数据库连接失败，打印错误信息
-    if (!$connection) {
-      die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
-    }
-
-    // 执行 SQL 语句查询用户表中 email 与用户提交的 email 相等的用户
-    $result = mysqli_query($connection, sprintf("select * from users where email = '%s' limit 1;", $email));
-
-    // 获取查询结果中的数据
-    if ($result != false && mysqli_num_rows($result) == 1) {
+    // 3. 判断用户名与密码是否正确
+    if (isset($data[0])) {
       // 存在该用户
-      $user = mysqli_fetch_assoc($result);
-
+      $user = $data[0];
       // 判断密码是否相同
       if ($user['password'] == $password) {
         // 登录成功
-
+        // Session 中记录登录用户 ID 维护登录状态
+        session_start();
+        $_SESSION['current_user_id'] = $user['id'];
         // 跳转到后台首页
         header('Location: /admin/index.php');
-
         // 结束执行
         exit;
       } else {
@@ -53,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
   }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
