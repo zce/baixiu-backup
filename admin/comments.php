@@ -39,7 +39,7 @@ require '../inc/db-helper.php';
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <tr class="danger">
       <td class="text-center"><input type="checkbox"></td>
       <td>大大</td>
       <td>楼主好人，顶一个</td>
