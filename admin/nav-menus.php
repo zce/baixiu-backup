@@ -39,27 +39,29 @@ $current_user = get_user_info();
         <h1>导航菜单</h1>
       </div>
       <!-- 有错误信息时展示 -->
-      <!-- <div class="alert alert-danger">
-        <strong>错误！</strong> 发生XXX错误
-      </div> -->
+      <div class="alert alert-danger" style="display: none;"></div>
       <div class="row">
         <div class="col-md-4">
           <form>
             <h2>添加新导航链接</h2>
             <div class="form-group">
-              <label for="text">链接文本</label>
-              <input id="text" class="form-control" name="text" type="text" placeholder="链接文本">
+              <label for="icon">图标 Class</label>
+              <input id="icon" class="form-control" name="icon" type="text" placeholder="图标 Class">
             </div>
             <div class="form-group">
-              <label for="title">链接抬头</label>
-              <input id="title" class="form-control" name="title" type="text" placeholder="链接抬头">
+              <label for="text">文本</label>
+              <input id="text" class="form-control" name="text" type="text" placeholder="文本">
             </div>
             <div class="form-group">
-              <label for="href">链接地址</label>
-              <input id="href" class="form-control" name="href" type="text" placeholder="链接地址">
+              <label for="title">标题</label>
+              <input id="title" class="form-control" name="title" type="text" placeholder="标题">
             </div>
             <div class="form-group">
-              <button class="btn btn-primary" type="submit">添加</button>
+              <label for="href">链接</label>
+              <input id="href" class="form-control" name="href" type="text" placeholder="链接">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary btn-save" type="button">添加</button>
             </div>
           </form>
         </div>
@@ -72,43 +74,13 @@ $current_user = get_user_info();
             <thead>
               <tr>
                 <th class="text-center" width="40"><input type="checkbox"></th>
-                <th>Text</th>
-                <th>Title</th>
-                <th>Href</th>
+                <th>文本</th>
+                <th>标题</th>
+                <th>链接</th>
                 <th class="text-center" width="100">操作</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td><i class="fa fa-glass"></i>奇趣事</td>
-                <td>奇趣事</td>
-                <td>#</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td><i class="fa fa-phone"></i>潮科技</td>
-                <td>潮科技</td>
-                <td>#</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td><i class="fa fa-fire"></i>会生活</td>
-                <td>会生活</td>
-                <td>#</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -118,8 +90,83 @@ $current_user = get_user_info();
 
   <?php require 'inc/aside.php'; ?>
 
+  <script id="menu_tmpl" type="text/x-jsrender">
+    <tr>
+      <td class="text-center"><input type="checkbox"></td>
+      <td><i class="{{: icon }}"></i>{{: text }}</td>
+      <td>{{: title }}</td>
+      <td>{{: href }}</td>
+      <td class="text-center">
+        <a class="btn btn-danger btn-xs btn-delete" data-index="{{: #index }}">删除</a>
+      </td>
+    </tr>
+  </script>
   <script src="/static/assets/vendors/jquery/jquery.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>
+  <script src="/static/assets/vendors/jsrender/jsrender.js"></script>
+  <script>
+    $(function () {
+      var menus
+
+      function load () {
+        $.get('/admin/options.php', { key: 'nav_menus' }, function (res) {
+          if (!res.success) {
+            $('.alert').text('获取数据失败').fadeIn()
+            return
+          }
+          try {
+            menus = JSON.parse(res.data)
+            var html = $('#menu_tmpl').render(menus)
+            $('table > tbody').html(html)
+          } catch (e) {
+            menus = []
+            console.log('parse "' + res.data + '" failed')
+          }
+        });
+      }
+
+      // 获取已有数据
+      load()
+
+      // 新增
+      $('.btn-save').on('click', function () {
+        $('.alert').empty().fadeOut()
+
+        menus.push({
+          icon: $('#icon').val(),
+          text: $('#text').val(),
+          title: $('#title').val(),
+          href: $('#href').val()
+        })
+
+        $.post('/admin/options.php', { key: 'nav_menus', value: JSON.stringify(menus) }, function (res) {
+          if (res.success) {
+            // 再次加载
+            load()
+            $('#icon').val('')
+            $('#text').val('')
+            $('#title').val('')
+            $('#href').val('')
+          } else {
+            $('.alert').text('保存失败，请重试').fadeIn()
+          }
+        })
+      })
+
+      // 删除
+      $('table > tbody').on('click', '.btn-delete', function (e) {
+        menus.splice(parseInt($(this).data('index')), 1)
+         $.post('/admin/options.php', { key: 'nav_menus', value: JSON.stringify(menus) }, function (res) {
+          if (res.success) {
+            // 再次加载
+            load()
+          } else {
+            $('.alert').text('保存失败，请重试').fadeIn()
+          }
+        })
+      })
+    })
+  </script>
   <script>NProgress.done()</script>
 </body>
 </html>

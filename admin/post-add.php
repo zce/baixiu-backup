@@ -104,7 +104,7 @@ $categories = query('select * from categories');
           <div class="form-group">
             <label for="slug">别名</label>
             <input id="slug" class="form-control" name="slug" type="text" value="<?php echo isset($_POST['slug']) ? $_POST['slug'] : ''; ?>" placeholder="slug">
-            <p class="help-block">https://zce.me/post/<strong><?php echo isset($_POST['slug']) ? $_POST['slug'] : 'slug'; ?></strong>/</p>
+            <p class="help-block">https://zce.me/post/<strong><?php echo isset($_POST['slug']) ? $_POST['slug'] : 'slug'; ?></strong></p>
           </div>
           <div class="form-group">
             <label for="feature">特色图像</label>
