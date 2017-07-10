@@ -140,7 +140,6 @@ $current_user = get_user_info();
           data: formData,
           type: 'post',
           success: function (res) {
-            console.log(res)
             if (res.success) {
               $('#image').val(res.data).siblings('.help-block').attr('src', res.data).fadeIn()
             } else {

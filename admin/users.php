@@ -90,7 +90,7 @@ $users = query('select * from users');
             <div class="form-group">
               <label for="slug">别名</label>
               <input id="slug" class="form-control" name="slug" type="text" placeholder="slug">
-              <p class="help-block">https://zce.me/author/<strong>slug</strong></p>
+              <p class="help-block"><?php echo get_root_url(); ?>/author/<strong>slug</strong></p>
             </div>
             <div class="form-group">
               <label for="nickname">昵称</label>

@@ -76,7 +76,7 @@ $categories = query('select * from categories');
             <div class="form-group">
               <label for="slug">别名</label>
               <input id="slug" class="form-control" name="slug" type="text" placeholder="slug">
-              <p class="help-block">https://zce.me/category/<strong>slug</strong></p>
+              <p class="help-block"><?php echo get_root_url(); ?>/category/<strong>slug</strong></p>
             </div>
             <div class="form-group">
               <button class="btn btn-primary" type="submit">添加</button>

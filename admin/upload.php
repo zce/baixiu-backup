@@ -3,14 +3,17 @@
  * 接收文件上传请求
  */
 
+// 载入配置文件
+require '../config.php';
+
 // 设置响应类型为 JSON
 header('Content-Type: application/json');
 
 $file = null;
 if (isset($_FILES['file']) && $_FILES['file']['size']) {
   // 保存文件到上传目录
-  if (move_uploaded_file($_FILES['file']['tmp_name'], '../static/uploads/' . $_FILES['file']['name'])) {
-    $file = '/static/uploads/' . $_FILES['file']['name'];
+  if (move_uploaded_file($_FILES['file']['tmp_name'], ROOT_PATH . UPLOAD_PATH . '/' . $_FILES['file']['name'])) {
+    $file = UPLOAD_PATH . '/' . $_FILES['file']['name'];
   }
 }
 

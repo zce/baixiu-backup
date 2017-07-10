@@ -105,8 +105,6 @@ function convert_status ($status) {
  * @return String          格式化后的时间字符串
  */
 function format_date ($created) {
-  // 设置默认时区！！！
-  date_default_timezone_set('UTC');
   // 转换为时间戳
   $timestamp = strtotime($created);
   // 格式化并返回

@@ -24,8 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $feature = null;
     if (isset($_FILES['feature']) && $_FILES['feature']['size']) {
       // 保存文件到上传目录
-      if (move_uploaded_file($_FILES['feature']['tmp_name'], '../static/uploads/' . $_FILES['feature']['name'])) {
-        $feature = '/static/uploads/' . $_FILES['feature']['name'];
+      if (move_uploaded_file($_FILES['feature']['tmp_name'], ROOT_PATH . UPLOAD_PATH . '/' . $_FILES['feature']['name'])) {
+        $feature = UPLOAD_PATH . '/' . $_FILES['feature']['name'];
       }
     }
 
@@ -104,7 +104,7 @@ $categories = query('select * from categories');
           <div class="form-group">
             <label for="slug">别名</label>
             <input id="slug" class="form-control" name="slug" type="text" value="<?php echo isset($_POST['slug']) ? $_POST['slug'] : ''; ?>" placeholder="slug">
-            <p class="help-block">https://zce.me/post/<strong><?php echo isset($_POST['slug']) ? $_POST['slug'] : 'slug'; ?></strong></p>
+            <p class="help-block"><?php echo get_root_url(); ?>/post/<strong><?php echo isset($_POST['slug']) ? $_POST['slug'] : 'slug'; ?></strong></p>
           </div>
           <div class="form-group">
             <label for="feature">特色图像</label>

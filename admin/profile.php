@@ -64,7 +64,7 @@ $current_user = get_user_info();
           <label for="slug" class="col-sm-3 control-label">别名</label>
           <div class="col-sm-6">
             <input id="slug" class="form-control" name="slug" type="type" value="zce" placeholder="slug">
-            <p class="help-block">https://zce.me/author/<strong>zce</strong></p>
+            <p class="help-block"><?php echo get_root_url(); ?>/author/<strong>zce</strong></p>
           </div>
         </div>
         <div class="form-group">

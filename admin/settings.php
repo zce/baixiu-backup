@@ -138,7 +138,6 @@ foreach ($data as $item) {
           data: formData,
           type: 'post',
           success: function (res) {
-            console.log(res)
             if (res.success) {
               $('#site_logo').val(res.data)
               $('#upload').siblings('img').attr('src', res.data).fadeIn()
