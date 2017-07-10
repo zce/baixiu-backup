@@ -68,7 +68,7 @@ $categories = query('select * from categories');
         <div class="col-md-4">
           <form action="categories.php" method="post">
             <h2>添加新分类目录</h2>
-            <input id="id" type="hidden" name="id" >
+            <input id="id" type="hidden" name="id">
             <div class="form-group">
               <label for="name">名称</label>
               <input id="name" class="form-control" name="name" type="text" placeholder="分类名称">
@@ -104,7 +104,7 @@ $categories = query('select * from categories');
                 <td><?php echo $item['name']; ?></td>
                 <td><?php echo $item['slug']; ?></td>
                 <td class="text-center">
-                  <button class="btn btn-info btn-xs edit-cat" data-id="<?php echo $item['id']; ?>" data-slug="<?php echo $item['slug']; ?>" data-name="<?php echo $item['name']; ?>">编辑</button>
+                  <button class="btn btn-info btn-xs btn-edit" data-id="<?php echo $item['id']; ?>" data-slug="<?php echo $item['slug']; ?>" data-name="<?php echo $item['name']; ?>">编辑</button>
                   <a href="category-delete.php?items=<?php echo $item['id']; ?>" class="btn btn-danger btn-xs">删除</a>
                 </td>
               </tr>
@@ -149,8 +149,15 @@ $categories = query('select * from categories');
         $tdCheckbox.prop('checked', checked).trigger('change')
       })
 
+      // URL 预览
+      $('#slug').on('input', function () {
+        var slug = $(this).val() || 'slug'
+        $(this).siblings('.help-block').children().text(slug)
+      })
+
+
       // 编辑分类
-      $('.edit-cat').on('click', function () {
+      $('.btn-edit').on('click', function () {
         $('form #id').val($(this).data('id'))
         $('form #slug').val($(this).data('slug')).trigger('input')
         $('form #name').val($(this).data('name'))
