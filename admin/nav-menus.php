@@ -97,7 +97,7 @@ $current_user = get_user_info();
       <td>{{: title }}</td>
       <td>{{: href }}</td>
       <td class="text-center">
-        <a class="btn btn-danger btn-xs btn-delete" data-index="{{: #index }}">删除</a>
+        <button class="btn btn-danger btn-xs btn-delete" data-index="{{: #index }}">删除</button>
       </td>
     </tr>
   </script>
@@ -106,7 +106,7 @@ $current_user = get_user_info();
   <script src="/static/assets/vendors/jsrender/jsrender.js"></script>
   <script>
     $(function () {
-      var menus
+      var menus = []
 
       function load () {
         $.get('/admin/options.php', { key: 'nav_menus' }, function (res) {

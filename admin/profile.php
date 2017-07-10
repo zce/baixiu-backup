@@ -36,7 +36,7 @@ $current_user = get_user_info();
     </nav>
     <div class="container-fluid">
       <div class="page-title">
-        <h1>我的个人资料</h1>
+        <h1>我的个人资料（作业）</h1>
       </div>
       <!-- 有错误信息时展示 -->
       <!-- <div class="alert alert-danger">

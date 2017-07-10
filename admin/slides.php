@@ -1,6 +1,6 @@
 <?php
 /**
- * 分类管理
+ * 轮播管理
  */
 
 require '../functions.php';
@@ -50,7 +50,8 @@ $current_user = get_user_info();
               <label for="image">图片</label>
               <!-- show when image chose -->
               <img class="help-block thumbnail" style="display: none">
-              <input id="image" class="form-control" name="image" type="file">
+              <input id="image" name="image" type="hidden">
+              <input id="upload" class="form-control" type="file">
             </div>
             <div class="form-group">
               <label for="title">标题</label>
@@ -61,7 +62,7 @@ $current_user = get_user_info();
               <input id="link" class="form-control" name="link" type="text" placeholder="链接">
             </div>
             <div class="form-group">
-              <button class="btn btn-primary" type="submit">添加</button>
+              <button class="btn btn-primary btn-save" type="button">添加</button>
             </div>
           </form>
         </div>
@@ -73,7 +74,6 @@ $current_user = get_user_info();
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th class="text-center" width="40"><input type="checkbox"></th>
                 <th class="text-center">图片</th>
                 <th>标题</th>
                 <th>链接</th>
@@ -81,26 +81,6 @@ $current_user = get_user_info();
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td class="text-center"><img class="slide" src="/static/uploads/slide_1.jpg" alt=""></td>
-                <td>XIU功能演示</td>
-                <td>#</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td class="text-center"><img class="slide" src="/static/uploads/slide_2.jpg" alt=""></td>
-                <td>XIU功能演示</td>
-                <td>#</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -110,8 +90,104 @@ $current_user = get_user_info();
 
   <?php require 'inc/aside.php'; ?>
 
+  <script id="slide_tmpl" type="text/x-jsrender">
+    <tr>
+      <td class="text-center"><img class="slide" src="{{: image }}"></td>
+      <td>{{: title }}</td>
+      <td>{{: link }}</td>
+      <td class="text-center">
+        <button class="btn btn-danger btn-xs btn-delete" data-index="{{: #index }}">删除</button>
+      </td>
+    </tr>
+  </script>
   <script src="/static/assets/vendors/jquery/jquery.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>
+  <script src="/static/assets/vendors/jsrender/jsrender.js"></script>
+  <script>
+    $(function () {
+      var slides = []
+
+      function load () {
+        $.get('/admin/options.php', { key: 'home_slides' }, function (res) {
+          if (!res.success) {
+            $('.alert').text('获取数据失败').fadeIn()
+            return
+          }
+          try {
+            slides = JSON.parse(res.data)
+            var html = $('#slide_tmpl').render(slides)
+            $('table > tbody').html(html)
+          } catch (e) {
+            slides = []
+            console.log('parse "' + res.data + '" failed')
+          }
+        });
+      }
+
+      // 获取已有数据
+      load()
+
+      // 异步上传文件
+      $('#upload').on('change', function () {
+        // 选择文件后异步上传文件
+        var formData = new FormData()
+        formData.append('file', $(this).prop('files')[0])
+        $.ajax({
+          url: '/admin/upload.php',
+          cache: false,
+          contentType: false,
+          processData: false,
+          data: formData,
+          type: 'post',
+          success: function (res) {
+            console.log(res)
+            if (res.success) {
+              $('#image').val(res.data).siblings('.help-block').attr('src', res.data).fadeIn()
+            } else {
+              $('#image').val('').siblings('.help-block').fadeOut()
+              $('.alert').text('上传文件失败').fadeIn()
+            }
+          }
+        })
+      })
+
+      // 新增
+      $('.btn-save').on('click', function () {
+        $('.alert').empty().fadeOut()
+
+        slides.push({
+          image: $('#image').val(),
+          title: $('#title').val(),
+          link: $('#link').val()
+        })
+
+        $.post('/admin/options.php', { key: 'home_slides', value: JSON.stringify(slides) }, function (res) {
+          if (res.success) {
+            // 再次加载
+            load()
+            $('#image').val('').siblings('.help-block').fadeOut()
+            $('#title').val('')
+            $('#link').val('')
+          } else {
+            $('.alert').text('保存失败，请重试').fadeIn()
+          }
+        })
+      })
+
+      // 删除
+      $('table > tbody').on('click', '.btn-delete', function (e) {
+        slides.splice(parseInt($(this).data('index')), 1)
+         $.post('/admin/options.php', { key: 'home_slides', value: JSON.stringify(slides) }, function (res) {
+          if (res.success) {
+            // 再次加载
+            load()
+          } else {
+            $('.alert').text('保存失败，请重试').fadeIn()
+          }
+        })
+      })
+    })
+  </script>
   <script>NProgress.done()</script>
 </body>
 </html>

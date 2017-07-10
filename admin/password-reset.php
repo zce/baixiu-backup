@@ -36,7 +36,7 @@ $current_user = get_user_info();
     </nav>
     <div class="container-fluid">
       <div class="page-title">
-        <h1>修改密码</h1>
+        <h1>修改密码（作业）</h1>
       </div>
       <!-- 有错误信息时展示 -->
       <!-- <div class="alert alert-danger">
